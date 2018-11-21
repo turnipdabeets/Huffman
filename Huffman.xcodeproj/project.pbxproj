@@ -13,7 +13,19 @@
 		890EFAD521A5CA03000E7D04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 890EFAD421A5CA03000E7D04 /* Assets.xcassets */; };
 		890EFAD821A5CA03000E7D04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 890EFAD621A5CA03000E7D04 /* LaunchScreen.storyboard */; };
 		890EFAE321A5CB47000E7D04 /* Huffman.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890EFAE221A5CB47000E7D04 /* Huffman.swift */; };
+		890EFAEB21A5D200000E7D04 /* HuffmanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890EFAEA21A5D200000E7D04 /* HuffmanTests.swift */; };
+		890EFAF221A5D3D8000E7D04 /* Huffman.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890EFAE221A5CB47000E7D04 /* Huffman.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		890EFAED21A5D200000E7D04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 890EFAC221A5CA00000E7D04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 890EFAC921A5CA00000E7D04;
+			remoteInfo = Huffman;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		890EFACA21A5CA00000E7D04 /* Huffman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Huffman.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,10 +36,20 @@
 		890EFAD721A5CA03000E7D04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		890EFAD921A5CA03000E7D04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		890EFAE221A5CB47000E7D04 /* Huffman.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Huffman.swift; sourceTree = "<group>"; };
+		890EFAE821A5D200000E7D04 /* HuffmanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HuffmanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		890EFAEA21A5D200000E7D04 /* HuffmanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HuffmanTests.swift; sourceTree = "<group>"; };
+		890EFAEC21A5D200000E7D04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		890EFAC721A5CA00000E7D04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		890EFAE521A5D200000E7D04 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				890EFACC21A5CA00000E7D04 /* Huffman */,
+				890EFAE921A5D200000E7D04 /* HuffmanTests */,
 				890EFACB21A5CA00000E7D04 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				890EFACA21A5CA00000E7D04 /* Huffman.app */,
+				890EFAE821A5D200000E7D04 /* HuffmanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +99,15 @@
 			path = Supporting;
 			sourceTree = "<group>";
 		};
+		890EFAE921A5D200000E7D04 /* HuffmanTests */ = {
+			isa = PBXGroup;
+			children = (
+				890EFAEA21A5D200000E7D04 /* HuffmanTests.swift */,
+				890EFAEC21A5D200000E7D04 /* Info.plist */,
+			);
+			path = HuffmanTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -95,6 +128,24 @@
 			productReference = 890EFACA21A5CA00000E7D04 /* Huffman.app */;
 			productType = "com.apple.product-type.application";
 		};
+		890EFAE721A5D200000E7D04 /* HuffmanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 890EFAEF21A5D200000E7D04 /* Build configuration list for PBXNativeTarget "HuffmanTests" */;
+			buildPhases = (
+				890EFAE421A5D200000E7D04 /* Sources */,
+				890EFAE521A5D200000E7D04 /* Frameworks */,
+				890EFAE621A5D200000E7D04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				890EFAEE21A5D200000E7D04 /* PBXTargetDependency */,
+			);
+			name = HuffmanTests;
+			productName = HuffmanTests;
+			productReference = 890EFAE821A5D200000E7D04 /* HuffmanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -107,6 +158,10 @@
 				TargetAttributes = {
 					890EFAC921A5CA00000E7D04 = {
 						CreatedOnToolsVersion = 10.0;
+					};
+					890EFAE721A5D200000E7D04 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 890EFAC921A5CA00000E7D04;
 					};
 				};
 			};
@@ -124,6 +179,7 @@
 			projectRoot = "";
 			targets = (
 				890EFAC921A5CA00000E7D04 /* Huffman */,
+				890EFAE721A5D200000E7D04 /* HuffmanTests */,
 			);
 		};
 /* End PBXProject section */
@@ -136,6 +192,13 @@
 				890EFAD821A5CA03000E7D04 /* LaunchScreen.storyboard in Resources */,
 				890EFAD521A5CA03000E7D04 /* Assets.xcassets in Resources */,
 				890EFAD321A5CA00000E7D04 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		890EFAE621A5D200000E7D04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,7 +215,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		890EFAE421A5D200000E7D04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				890EFAEB21A5D200000E7D04 /* HuffmanTests.swift in Sources */,
+				890EFAF221A5D3D8000E7D04 /* Huffman.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		890EFAEE21A5D200000E7D04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 890EFAC921A5CA00000E7D04 /* Huffman */;
+			targetProxy = 890EFAED21A5D200000E7D04 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		890EFAD121A5CA00000E7D04 /* Main.storyboard */ = {
@@ -326,6 +406,46 @@
 			};
 			name = Release;
 		};
+		890EFAF021A5D200000E7D04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DSR73SAGDW;
+				INFOPLIST_FILE = HuffmanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juicecrawl.HuffmanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Huffman.app/Huffman";
+			};
+			name = Debug;
+		};
+		890EFAF121A5D200000E7D04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DSR73SAGDW;
+				INFOPLIST_FILE = HuffmanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juicecrawl.HuffmanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Huffman.app/Huffman";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -343,6 +463,15 @@
 			buildConfigurations = (
 				890EFADD21A5CA03000E7D04 /* Debug */,
 				890EFADE21A5CA03000E7D04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		890EFAEF21A5D200000E7D04 /* Build configuration list for PBXNativeTarget "HuffmanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				890EFAF021A5D200000E7D04 /* Debug */,
+				890EFAF121A5D200000E7D04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
