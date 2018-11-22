@@ -13,21 +13,28 @@ class HuffmanTests: XCTestCase {
 
     func testFrequencyCountOnInput() {
         let huff = Huffman("ANNA").frequency
-        let expected: [Character: Int] = ["A": 2, "N": 2]
+        let expected: [String: Int] = ["A": 2, "N": 2]
         XCTAssertEqual(huff, expected)
     }
 
     func testSortedFrequency(){
         let huff = Huffman("ZZZNZZZZAZGAATAANNT")
-        let expected: [Character] = ["G", "T", "N", "A", "Z",]
+        let expected: [String] = ["Z", "A", "N", "T", "G"]
         XCTAssertEqual(huff.sorted, expected)
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testTreeCreation(){
+        let string = "MISSISSIPPI_RIVER!"
+        let huff = Huffman(string)
+        let tree = huff.createTree()
+        XCTAssertEqual(tree.value, string.count)
     }
+
+//    func testPerformanceExample() {
+//        // This is an example of a performance test case.
+//        self.measure {
+//            // Put the code you want to measure the time of here.
+//        }
+//    }
 
 }
