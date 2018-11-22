@@ -11,11 +11,14 @@ import Foundation
 class Huffman {
     private(set) var frequency: [String: Int]
     private(set) var sorted = [String]()
+    private(set) var key = [String: String]()
 
     init(_ input: String) {
         self.frequency = Huffman.sortedFrequency(for: input)
         // sorted by decreasing frequency
         self.sorted = Array(self.frequency).sorted(by: {$0.1 > $1.1}).map{$0.0}
+        // generate encoded key map
+        self.key = generateKey(for: self.createTree(), prefix: "")
     }
 
     static private func sortedFrequency(for input: String) -> [String: Int] {
@@ -25,6 +28,17 @@ class Huffman {
             frequency[letter] = (frequency[letter] ?? 0) + 1
         }
         return frequency
+    }
+
+    func generateKey(for node: Node, prefix: String) -> [String: String] {
+        var key = [String: String]()
+        if let left = node.left, let right = node.right {
+            key.merge(generateKey(for: left, prefix: prefix + "0"), uniquingKeysWith: {current,_ in current})
+            key.merge(generateKey(for: right, prefix: prefix + "1"), uniquingKeysWith: {current,_ in current})
+        }else {
+            key[node.name] = prefix
+        }
+        return key
     }
 
     func createTree() -> Node {
