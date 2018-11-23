@@ -12,7 +12,7 @@ import XCTest
 class HuffmanTests: XCTestCase {
 
     func testEncoded() {
-        let huffCode = Huffman("MISSISSIPPI_RIVER").encode()
+        let huffCode = Huffman("MISSISSIPPI_RIVER").code
         XCTAssertEqual(huffCode.joined().count, 46)
     }
 
@@ -29,8 +29,7 @@ class HuffmanTests: XCTestCase {
     func testDecode() {
         let word = "MISSISSIPPI_RIVER!"
         let huff = Huffman(word)
-        let code = huff.encode()
-        let decode = huff.decode(code, with: huff.key)
+        let decode = huff.decode(huff.code, with: huff.key)
         XCTAssertEqual(decode, word)
     }
 

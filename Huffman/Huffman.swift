@@ -10,11 +10,11 @@ import Foundation
 
 class Huffman {
     private(set) var key = [String: String]()
-    var input: String
+    private(set) var code = [String]()
 
     init(_ input: String) {
-        self.input = input
         self.key = self.getKey(for: input)
+        self.code = self.encode(for: input)
     }
 
     private func getKey(for input: String) -> [String: String]{
@@ -28,7 +28,7 @@ class Huffman {
         return generateKey(for: createTree(with: queue), prefix: "")
     }
 
-    func encode() -> [String] {
+    private func encode(for input: String) -> [String] {
         var code = [String]()
         for char in input {
             if let prefix = key[String(char)] {
