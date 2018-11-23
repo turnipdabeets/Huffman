@@ -11,29 +11,27 @@ import XCTest
 
 class HuffmanTests: XCTestCase {
 
-    func testFrequencyCountOnInput() {
-        let huff = Huffman("ANNA").frequency
-        let expected: [String: Int] = ["A": 2, "N": 2]
-        XCTAssertEqual(huff, expected)
+    func testEncoded() {
+        let huffCode = Huffman("MISSISSIPPI_RIVER").encode()
+        XCTAssertEqual(huffCode.joined().count, 46)
     }
 
-    func testSortedFrequency() {
-        let huff = Huffman("ZZZNZZZZAZGAATAANNT")
-        let expected: [String] = ["Z", "A", "N", "T", "G"]
-        XCTAssertEqual(huff.sorted, expected)
+    func testKeyCountMatchesUniqueLetters() {
+        let word = "SUCCESS"
+        var uniqueLetters = Set<Character>()
+        word.forEach{ char in
+            uniqueLetters.insert(char)
+        }
+        let huff = Huffman(word)
+        XCTAssertEqual(huff.key.count, uniqueLetters.count)
     }
 
-    func testTreeCreation() {
-        let string = "MISSISSIPPI_RIVER!"
-        let huff = Huffman(string)
-        let tree = huff.createTree()
-        XCTAssertEqual(tree.value, string.count)
-    }
-
-    func testingKeyGeneration() {
-        let huff = Huffman("SUCCESS")
-        XCTAssertEqual(huff.key["S"]!.count, 1)
-        XCTAssertEqual(huff.key["E"]!.count, 3)
+    func testDecode() {
+        let word = "MISSISSIPPI_RIVER!"
+        let huff = Huffman(word)
+        let code = huff.encode()
+        let decode = huff.decode(code, with: huff.key)
+        XCTAssertEqual(decode, word)
     }
 
 }

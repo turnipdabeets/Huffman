@@ -9,19 +9,50 @@
 import Foundation
 
 class Huffman {
-    private(set) var frequency: [String: Int]
-    private(set) var sorted = [String]()
     private(set) var key = [String: String]()
+    var input: String
 
     init(_ input: String) {
-        self.frequency = Huffman.sortedFrequency(for: input)
-        // sorted by decreasing frequency
-        self.sorted = Array(self.frequency).sorted(by: {$0.1 > $1.1}).map{$0.0}
-        // generate encoded key map
-        self.key = generateKey(for: self.createTree(), prefix: "")
+        self.input = input
+        self.key = self.getKey(for: input)
     }
 
-    static private func sortedFrequency(for input: String) -> [String: Int] {
+    private func getKey(for input: String) -> [String: String]{
+        let frequencyMap = Array(input).reduce(into: [String: Int](), { freq, char in
+            let letter = String(char)
+            return freq[letter] = (freq[letter] ?? 0) + 1
+        })
+        let sorted = Array(frequencyMap).sorted(by: {$0.1 > $1.1}).map{$0.0}
+        // create queue of initial Nodes
+        let queue = sorted.map{ Node(name: $0, value: frequencyMap[$0]!)}
+        return generateKey(for: createTree(with: queue), prefix: "")
+    }
+
+    func encode() -> [String] {
+        var code = [String]()
+        for char in input {
+            if let prefix = key[String(char)] {
+                code.append(prefix)
+            }
+        }
+        return code
+    }
+
+    func decode(_ code: [String], with key: [String: String]) -> String {
+        var reverseKey = [String:String]()
+        for (k, v) in key {
+            reverseKey[v] = k
+        }
+        var word = ""
+        for prefix in code {
+            if let letter = reverseKey[prefix] {
+                word += letter
+            }
+        }
+        return word
+    }
+
+    private func sortedFrequency(for input: String) -> [String: Int] {
         var frequency = [String: Int]()
         for char in input {
             let letter = String(char)
@@ -30,7 +61,7 @@ class Huffman {
         return frequency
     }
 
-    func generateKey(for node: Node, prefix: String) -> [String: String] {
+    private func generateKey(for node: Node, prefix: String) -> [String: String] {
         var key = [String: String]()
         if let left = node.left, let right = node.right {
             key.merge(generateKey(for: left, prefix: prefix + "0"), uniquingKeysWith: {current,_ in current})
@@ -41,10 +72,8 @@ class Huffman {
         return key
     }
 
-    func createTree() -> Node {
-        // create queue of initial Nodes
-        var queue = sorted.map{ Node(name: $0, value: frequency[$0]!)}
-
+    private func createTree(with queue: [Node]) -> Node {
+        var queue = queue
         // until we have 1 root node, get subtree of least frequency
         while queue.count > 1 {
             let last = queue.count - 1
