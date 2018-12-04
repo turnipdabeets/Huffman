@@ -10,34 +10,24 @@ import XCTest
 @testable import Huffman
 
 class HuffmanTests: XCTestCase {
-
+    
     func testEncoded() {
         let huffCode = Huffman("MISSISSIPPI_RIVER").code
         XCTAssertEqual(huffCode.joined().count, 46)
     }
-
-    func testKeyCountMatchesUniqueLetters() {
-        let word = "SUCCESS"
-        var uniqueLetters = Set<Character>()
-        word.forEach{ char in
-            uniqueLetters.insert(char)
-        }
-        let huff = Huffman(word)
-        XCTAssertEqual(huff.key.count, uniqueLetters.count)
-    }
-
+    
     func testDecode() {
         let word = "MISSISSIPPI_RIVER!"
         let huff = Huffman(word)
-        let decode = Huffman.decode(huff.code, with: huff.key)
+        let decode = huff.decode()
         XCTAssertEqual(decode, word)
     }
-
+    
     func testDecodeWithLongerInput() {
         let paragraph = "Farm-to-table glossier organic beard four loko wayfarers, biodiesel ugh. Cliche flexitarian kogi health goth direct trade. Unicorn squid gentrify letterpress bitters single-origin coffee. Locavore flannel woke sustainable ethical tofu aesthetic pabst marfa pug knausgaard man braid tilde. Fashion axe PBR&B kogi gentrify vegan woke prism health goth. Vaporware flannel yuccie ethical artisan hella VHS church-key, cronut gluten-free 8-bit poutine."
         let huff = Huffman(paragraph)
-        let decode = Huffman.decode(huff.code, with: huff.key)
+        let decode = huff.decode()
         XCTAssertEqual(decode, paragraph)
     }
-
+    
 }
