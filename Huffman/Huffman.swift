@@ -18,27 +18,17 @@ class Huffman {
     }
 
     func decode() -> String {
-        var reverseKey = [String:String]()
-        for (k, v) in key {
-            reverseKey[v] = k
-        }
-        var word = ""
-        for prefix in code {
-            if let letter = reverseKey[prefix] {
-                word += letter
-            }
-        }
-        return word
+        let reverseKey = Dictionary(uniqueKeysWithValues: zip(key.values, key.keys))
+        return code.compactMap({ reverseKey[$0]}).joined()
     }
     
     static private func getKey(for input: String) -> [String: String] {
         // sort letter frequency by decreasing count
-        let sortedFrequency = Array(input)
+        let sortedFrequency = input
             .reduce(into: [String: Int](), { freq, char in
-                let letter = String(char)
-                return freq[letter] = freq[letter, default: 0] + 1
+                freq[String(char), default: 0] += 1
             })
-            .sorted(by: {$0.1 > $1.1})
+            .sorted(by: {$0.value > $1.value})
         // create queue of initial Nodes
         let queue = sortedFrequency.map{ Node(name: $0.key, value: $0.value)}
         // generate key by traversing tree
@@ -46,13 +36,7 @@ class Huffman {
     }
     
     static private func encode(for input: String, with key: [String: String]) -> [String] {
-        var code = [String]()
-        for char in input {
-            if let prefix = key[String(char)] {
-                code.append(prefix)
-            }
-        }
-        return code
+        return input.compactMap({key[String($0)]})
     }
 
     static private func generateKey(for node: Node, prefix: String) -> [String: String] {
@@ -73,9 +57,10 @@ class Huffman {
             let last = queue.count - 1
             let node1 = queue[last]
             let node2 = queue[last - 1]
+            let node3 = queue.count >= 3 ? queue[last - 2] : nil
             
             // if we have a third then compare frequency to second
-            if let node3 = queue[safe: last - 2], node3.value + node2.value < node2.value + node1.value {
+            if let node3 = node3, node3.value + node2.value < node2.value + node1.value {
                 queue.remove(at: last - 1)
                 queue.remove(at: last - 2)
                 queue.append(Huffman.createRoot(with: node2, and: node3))
@@ -95,10 +80,10 @@ class Huffman {
 }
 
 class Node {
-    var name: String
-    var value: Int
-    var left: Node?
-    var right: Node?
+    let name: String
+    let value: Int
+    let left: Node?
+    let right: Node?
     
     init(name: String, value: Int, left: Node? = nil, right: Node? = nil) {
         self.name = name
@@ -108,8 +93,3 @@ class Node {
     }
 }
 
-extension Collection {
-    subscript (safe index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
