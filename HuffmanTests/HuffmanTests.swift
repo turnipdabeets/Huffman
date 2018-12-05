@@ -22,6 +22,14 @@ class HuffmanTests: XCTestCase {
         let decode = huff.decode()
         XCTAssertEqual(decode, word)
     }
+
+    func testEqualWeight() {
+        let word = "abcdefgh"
+        let huff = Huffman(word)
+        let decode = huff.decode()
+        // frequencyTable should show all 0s and 1s as count of 3
+        XCTAssertEqual(decode, word)
+    }
     
     func testDecodeWithLongerInput() {
         let paragraph = "Farm-to-table glossier organic beard four loko wayfarers, biodiesel ugh. Cliche flexitarian kogi health goth direct trade. Unicorn squid gentrify letterpress bitters single-origin coffee. Locavore flannel woke sustainable ethical tofu aesthetic pabst marfa pug knausgaard man braid tilde. Fashion axe PBR&B kogi gentrify vegan woke prism health goth. Vaporware flannel yuccie ethical artisan hella VHS church-key, cronut gluten-free 8-bit poutine."

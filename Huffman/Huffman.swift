@@ -9,20 +9,20 @@
 import Foundation
 
 class Huffman {
-    private var key = [String: String]()
+    private var frequencyTable = [String: String]()
     private(set) var code = [String]()
     
     init(_ input: String) {
-        self.key = Huffman.getKey(for: input)
-        self.code = Huffman.encode(for: input, with: self.key)
+        self.frequencyTable = Huffman.buildFrequencyTable(for: input)
+        self.code = Huffman.encode(for: input, with: self.frequencyTable)
     }
 
     func decode() -> String {
-        let reverseKey = Dictionary(uniqueKeysWithValues: zip(key.values, key.keys))
-        return code.compactMap({ reverseKey[$0]}).joined()
+        let reverseTable = Dictionary(uniqueKeysWithValues: zip(frequencyTable.values, frequencyTable.keys))
+        return code.compactMap({ reverseTable[$0]}).joined()
     }
     
-    static private func getKey(for input: String) -> [String: String] {
+    static private func buildFrequencyTable(for input: String) -> [String: String] {
         // sort letter frequency by decreasing count
         let sortedFrequency = input
             .reduce(into: [String: Int](), { freq, char in
@@ -51,26 +51,15 @@ class Huffman {
     }
     
     static private func createTree(with queue: [Node]) -> Node {
-        var queue = queue
-        // until we have 1 root node, get subtree of least frequency
+        var queue = PriorityQueue(queue: queue)
+        // until we have 1 root node, join subtrees of least frequency
         while queue.count > 1 {
-            let last = queue.count - 1
-            let node1 = queue[last]
-            let node2 = queue[last - 1]
-            let node3 = queue.count >= 3 ? queue[last - 2] : nil
-            
-            // if we have a third then compare frequency to second
-            if let node3 = node3, node3.value + node2.value < node2.value + node1.value {
-                queue.remove(at: last - 1)
-                queue.remove(at: last - 2)
-                queue.append(Huffman.createRoot(with: node2, and: node3))
-            } else {
-                queue.removeLast()
-                queue.removeLast()
-                queue.append(Huffman.createRoot(with: node1, and: node2))
-            }
+            let node1 = queue.dequeue()
+            let node2 = queue.dequeue()
+            let rootNode = Huffman.createRoot(with: node1, and: node2)
+            queue.enqueue(node: rootNode)
         }
-        return queue[0]
+        return queue.queue[0]
     }
     
     static private func createRoot(with first: Node, and second: Node) -> Node {
@@ -79,7 +68,24 @@ class Huffman {
     
 }
 
-class Node {
+// TODO:  - move sorting to PriorityQueue init
+struct PriorityQueue {
+    var queue: [Node]
+    var count: Int {
+        return queue.count
+    }
+    mutating func enqueue(node: Node) {
+        queue.insert(node, at: queue.index(where: {$0.value <= node.value}) ?? 0)
+    }
+    mutating func dequeue() -> Node {
+        return queue.removeLast()
+    }
+}
+
+class Node: CustomStringConvertible {
+    var description: String {
+        return "\(name): \(value)"
+    }
     let name: String
     let value: Int
     let left: Node?
