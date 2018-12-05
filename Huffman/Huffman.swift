@@ -23,12 +23,10 @@ class Huffman {
     }
     
     static private func buildFrequencyTable(for input: String) -> [String: String] {
-        // sort letter frequency by decreasing count
-        let sortedFrequency = input
-            .reduce(into: [String: Int](), { freq, char in
-                freq[String(char), default: 0] += 1
-            })
-            .sorted(by: {$0.value > $1.value})
+        // count letter frequency
+        let sortedFrequency = input.reduce(into: [String: Int](), { freq, char in
+            freq[String(char), default: 0] += 1
+        })
         // create queue of initial Nodes
         let queue = sortedFrequency.map{ Node(name: $0.key, value: $0.value)}
         // generate key by traversing tree
@@ -68,7 +66,6 @@ class Huffman {
     
 }
 
-// TODO:  - move sorting to PriorityQueue init
 struct PriorityQueue {
     var queue: [Node]
     var count: Int {
@@ -79,6 +76,10 @@ struct PriorityQueue {
     }
     mutating func dequeue() -> Node {
         return queue.removeLast()
+    }
+    init(queue: [Node]){
+        // assumes queue will always be sorted by decreasing count
+        self.queue = queue.sorted(by: {$0.value > $1.value})
     }
 }
 
@@ -98,4 +99,3 @@ class Node: CustomStringConvertible {
         self.right = right
     }
 }
-
