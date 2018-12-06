@@ -8,18 +8,34 @@
 
 import Foundation
 
+struct HuffData: Codable {
+    var code: [String]
+    var frequencyTable: [String: String]
+}
+
 class Huffman {
-    private var frequencyTable = [String: String]()
-    private(set) var code = [String]()
-    
-    init(_ input: String) {
-        self.frequencyTable = Huffman.buildFrequencyTable(for: input)
-        self.code = Huffman.encode(for: input, with: self.frequencyTable)
+    static func decode(_ data: Data) throws -> String {
+        do {
+            let huff = try JSONDecoder().decode(HuffData.self, from: data)
+            let reverseTable = Dictionary(uniqueKeysWithValues: zip(huff.frequencyTable.values, huff.frequencyTable.keys))
+            return huff.code.compactMap({ reverseTable[$0]}).joined()
+        }
+        catch let error {
+            throw error
+        }
     }
 
-    func decode() -> String {
-        let reverseTable = Dictionary(uniqueKeysWithValues: zip(frequencyTable.values, frequencyTable.keys))
-        return code.compactMap({ reverseTable[$0]}).joined()
+    static func encode(_ input: String) throws -> Data {
+        let frequencyTable = Huffman.buildFrequencyTable(for: input)
+        let code = input.compactMap({frequencyTable[String($0)]})
+        let huff = HuffData(code: code, frequencyTable: frequencyTable)
+        do {
+            let data = try JSONEncoder().encode(huff)
+            return data
+        }
+        catch let error {
+            throw error
+        }
     }
     
     static private func buildFrequencyTable(for input: String) -> [String: String] {
@@ -31,10 +47,6 @@ class Huffman {
         let queue = sortedFrequency.map{ Node(name: $0.key, value: $0.value)}
         // generate key by traversing tree
         return Huffman.generateKey(for: Huffman.createTree(with: queue), prefix: "")
-    }
-    
-    static private func encode(for input: String, with key: [String: String]) -> [String] {
-        return input.compactMap({key[String($0)]})
     }
 
     static private func generateKey(for node: Node, prefix: String) -> [String: String] {
@@ -49,6 +61,7 @@ class Huffman {
     }
     
     static private func createTree(with queue: [Node]) -> Node {
+        // initialize queue that sorts by decreasing count
         var queue = PriorityQueue(queue: queue)
         // until we have 1 root node, join subtrees of least frequency
         while queue.count > 1 {
