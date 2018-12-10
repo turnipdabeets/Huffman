@@ -9,44 +9,34 @@
 import Foundation
 
 struct HuffData: Codable {
-    var code: [String]
-    var frequencyTable: [String: String]
+    var code: String
+    var tree: Node
 }
 
 class Huffman {
     static func decode(_ data: Data) throws -> String {
-        do {
-            let huff = try JSONDecoder().decode(HuffData.self, from: data)
-            let reverseTable = Dictionary(uniqueKeysWithValues: zip(huff.frequencyTable.values, huff.frequencyTable.keys))
-            return huff.code.compactMap({ reverseTable[$0]}).joined()
-        }
-        catch let error {
-            throw error
-        }
+        let huff = try JSONDecoder().decode(HuffData.self, from: data)
+        return Huffman.traverse(tree: huff.tree, with: huff.code)
     }
 
     static func encode(_ input: String) throws -> Data {
-        let frequencyTable = Huffman.buildFrequencyTable(for: input)
-        let code = input.compactMap({frequencyTable[String($0)]})
-        let huff = HuffData(code: code, frequencyTable: frequencyTable)
-        do {
-            let data = try JSONEncoder().encode(huff)
-            return data
-        }
-        catch let error {
-            throw error
-        }
-    }
-    
-    static private func buildFrequencyTable(for input: String) -> [String: String] {
         // count letter frequency
         let sortedFrequency = input.reduce(into: [String: Int](), { freq, char in
             freq[String(char), default: 0] += 1
         })
         // create queue of initial Nodes
         let queue = sortedFrequency.map{ Node(name: $0.key, value: $0.value)}
+        // create tree
+        let tree = Huffman.createTree(with: queue)
         // generate key by traversing tree
-        return Huffman.generateKey(for: Huffman.createTree(with: queue), prefix: "")
+        let key = Huffman.generateKey(for: tree, prefix: "")
+        let code = input.compactMap({key[String($0)]}).joined()
+        print("CODE", input.compactMap({key[String($0)]}))
+        // TODO: bit pack
+        print("packed", UInt8(code.prefix(8), radix: 2))
+        let huff = HuffData(code: code, tree: tree)
+        let data = try JSONEncoder().encode(huff)
+        return data
     }
 
     static private func generateKey(for node: Node, prefix: String) -> [String: String] {
@@ -72,6 +62,23 @@ class Huffman {
         }
         return queue.queue[0]
     }
+
+    static private func traverse(tree: Node, with code: String) -> String {
+        var result = ""
+        var node = tree
+        for bit in code {
+            if bit == "0", let left = node.left {
+                node = left
+            } else if bit == "1", let right = node.right {
+                node = right
+            }
+            if node.left == nil && node.right == nil {
+                result += node.name
+                node = tree
+            }
+        }
+        return result
+    }
     
     static private func createRoot(with first: Node, and second: Node) -> Node {
         return Node(name: "\(first.name)\(second.name)", value: first.value + second.value, left: first, right: second)
@@ -96,7 +103,7 @@ struct PriorityQueue {
     }
 }
 
-class Node: CustomStringConvertible {
+class Node: CustomStringConvertible, Codable {
     var description: String {
         return "\(name): \(value)"
     }
