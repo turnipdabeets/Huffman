@@ -9,14 +9,25 @@
 import Foundation
 
 struct HuffData: Codable {
-    var code: String
+    var code: [UInt8]
     var tree: Node
+    var pad: Int
 }
 
 class Huffman {
     static func decode(_ data: Data) throws -> String {
         let huff = try JSONDecoder().decode(HuffData.self, from: data)
-        return Huffman.traverse(tree: huff.tree, with: huff.code)
+        var bits: String = ""
+        // return bits to a string O and 1
+        for i in huff.code {
+            var str = String(i, radix: 2)
+            // if bits originally started with zeros, that was removed e.g. 32
+            if str.count < 8 {
+                str = String(repeating: "0", count: 8 - str.count) + str
+            }
+            bits += str
+        }
+        return Huffman.traverse(tree: huff.tree, with: String(bits.dropLast(huff.pad)))
     }
 
     static func encode(_ input: String) throws -> Data {
@@ -30,11 +41,11 @@ class Huffman {
         let tree = Huffman.createTree(with: queue)
         // generate key by traversing tree
         let key = Huffman.generateKey(for: tree, prefix: "")
+        // bit packed code
         let code = input.compactMap({key[String($0)]}).joined()
-        print("CODE", input.compactMap({key[String($0)]}))
-        // TODO: bit pack
-        print("packed", UInt8(code.prefix(8), radix: 2))
-        let huff = HuffData(code: code, tree: tree)
+        let buffer = Huffman.packBits(for: code)
+        // save data
+        let huff = HuffData(code: buffer.code, tree: tree, pad: buffer.pad)
         let data = try JSONEncoder().encode(huff)
         return data
     }
@@ -83,7 +94,19 @@ class Huffman {
     static private func createRoot(with first: Node, and second: Node) -> Node {
         return Node(name: "\(first.name)\(second.name)", value: first.value + second.value, left: first, right: second)
     }
-    
+
+    static private func packBits(for s: String) -> (pad: Int, code: [UInt8]) {
+        var result = [UInt8]()
+        // pad with extra "0"'s to a length that is exact multiple of 8
+        let padding = 8 - (s.count % 8)
+        var bits = s + String(repeating: "0", count: padding)
+        // convert 8 bits at a time to a byte
+        while !bits.isEmpty {
+            result.append(UInt8(bits.prefix(8), radix: 2)!)
+            bits = String(bits.dropFirst(8))
+        }
+        return (pad: padding, code: result)
+    }
 }
 
 struct PriorityQueue {
